@@ -9,14 +9,32 @@
 enum ButtonType {
     case red, blue, gray, transparent
 }
+
 enum ButtonSize {
     case sm, lg
+
+    var height: CGFloat {
+        switch self {
+        case .sm: return 48.0
+        case .lg: return 60.0
+        }
+    }
 }
 
 import SwiftUI
 import UIKit
 
 struct gestaltButton: View {
+    var foregroundColor: Color {
+        switch buttonType {
+        case .transparent:
+            return Color.black
+        case .gray:
+            return Color.black
+        default:
+            return Color.white
+        }
+    }
     var buttonText: String
     var buttonType: ButtonType = .red
     var fillWidth: Bool = false
@@ -48,12 +66,11 @@ struct gestaltButton: View {
     var body: some View {
             Button(action: {}) {
                 Text(buttonText)
-                    .foregroundColor(buttonType == .transparent ? Color.primary : (buttonType == .gray ? Color.black : Color.white))
+                    .foregroundColor(foregroundColor)
                     .font(.callout)
                     .fontWeight(.semibold)
                     .padding(16)
-                    .frame(maxWidth: fillWidth ? .infinity : nil)
-                    .frame(height: buttonSize == .sm ? 48 : 60)
+                    .frame(maxWidth: fillWidth ? .infinity : nil, minHeight: buttonSize.height)
                     .background(backgroundColor)
                     .cornerRadius(666)
             }
